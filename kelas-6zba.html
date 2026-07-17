@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kelas 6 Zubair Bin Awwam (6ZBA)</title>
+<meta name="description" content="Website resmi Kelas 6 Zubair Bin Awwam (6ZBA)">
+
+<style>
+/* ==========================================================================
+   1. RESET & ROOT VARIABLES
+   ========================================================================== */
+:root{
+  --bg-1:#05070d;
+  --bg-2:#0a0f1c;
+  --accent-1:#7c5cff;
+  --accent-2:#38e6c5;
+  --accent-3:#ff6b9d;
+  --text-main:#eef1f8;
+  --text-muted:#a3acc2;
+  --glass-bg:rgba(255,255,255,0.06);
+  --glass-border:rgba(255,255,255,0.14);
+  --shadow-soft:0 20px 60px rgba(0,0,0,0.45);
+  --radius-lg:28px;
+  --radius-md:18px;
+  --radius-sm:10px;
+  --font-display:'Georgia', 'Segoe UI', serif;
+  --font-body:'Segoe UI', system-ui, -apple-system, sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+html{ scroll-behavior:smooth; }
+
+body{
+  font-family:var(--font-body);
+  background:var(--bg-1);
+  color:var(--text-main);
+  overflow-x:hidden;
+  min-height:100vh;
+  line-height:1.6;
+}
+
+img{ max-width:100%; display:block; }
+
+a{ color:inherit; text-decoration:none; }
+
+button{ font-family:inherit; cursor:pointer; border:none; outline:none; background:none; color:inherit; }
+
+ul{ list-style:none; }
+
+::selection{ background:var(--accent-1); color:#fff; }
+
+/* Scrollbar styling */
+::-webkit-scrollbar{ width:10px; }
+::-webkit-scrollbar-track{ background:var(--bg-1); }
+::-webkit-scrollbar-thumb{ background:linear-gradient(var(--accent-1),var(--accent-2)); border-radius:10px; }
+
+/* ==========================================================================
+   2. ANIMATED GRADIENT BACKGROUND + FLOATING BLOBS
+   ========================================================================== */
+.bg-animated{
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  background:linear-gradient(-45deg, #05070d, #101534, #1c1140, #0a0f1c, #150a2e);
+  background-size:400% 400%;
+  animation:gradientShift 22s ease infinite;
+}
+
+@keyframes gradientShift{
+  0%{ background-position:0% 50%; }
+  50%{ background-position:100% 50%; }
+  100%{ background-position:0% 50%; }
+}
+
+.blob{
+  position:fixed;
+  border-radius:50%;
+  filter:blur(80px);
+  opacity:0.45;
+  z-index:-2;
+  pointer-events:none;
+  will-change:transform;
+}
+
+.blob-1{
+  width:420px; height:420px;
+  background:var(--accent-1);
+  top:-100px; left:-100px;
+  animation:floatBlob1 18s var(--ease) infinite;
+}
+.blob-2{
+  width:380px; height:380px;
+  background:var(--accent-2);
+  bottom:-120px; right:-80px;
+  animation:floatBlob2 22s var(--ease) infinite;
+}
+.blob-3{
+  width:300px; height:300px;
+  background:var(--accent-3);
+  top:40%; left:60%;
+  animation:floatBlob3 26s var(--ease) infinite;
+}
+
+@keyframes floatBlob1{
+  0%,100%{ transform:translate(0,0) scale(1); }
+  33%{ transform:translate(120px,80px) scale(1.15); }
+  66%{ transform:translate(-40px,140px) scale(0.9); }
+}
+@keyframes floatBlob2{
+  0%,100%{ transform:translate(0,0) scale(1); }
+  33%{ transform:translate(-100px,-60px) scale(1.1); }
+  66%{ transform:translate(60px,-120px) scale(0.95); }
+}
+@keyframes floatBlob3{
+  0%,100%{ transform:translate(0,0) scale(1); }
+  50%{ transform:translate(-150px,100px) scale(1.2); }
+}
+
+.noise-overlay{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  opacity:0.03;
+  pointer-events:none;
+  background-image:repeating-linear-gradient(0deg, #fff 0px, transparent 1px, transparent 2px);
+}
+
+/* ==========================================================================
+   3. LOADING SCREEN
+   ========================================================================== */
+#loading-screen{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:var(--bg-1);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:20px;
+  transition:opacity .8s var(--ease), visibility .8s var(--ease);
+}
+
+#loading-screen.hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.loader-ring{
+  width:80px; height:80px;
+  border-radius:50%;
+  border:4px solid rgba(255,255,255,0.08);
+  border-top-color:var(--accent-1);
+  border-right-color:var(--accent-2);
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+.loader-text{
+  font-size:0.95rem;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  animation:pulseText 1.6s ease-in-out infinite;
+}
+
+@keyframes pulseText{
+  0%,100%{ opacity:0.4; }
+  50%{ opacity:1; }
+}
+
+/* ==========================================================================
+   4. NAVBAR
+   ========================================================================== */
+.navbar{
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 6%;
+  background:transparent;
+  border-bottom:1px solid transparent;
+  transition:background .4s var(--ease), border-color .4s var(--ease), padding .4s var(--ease), backdrop-filter .4s var(--ease);
+}
+
+.navbar.scrolled{
+  background:rgba(8,10,20,0.65);
+  backdrop-filter:blur(18px) saturate(140%);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  border-bottom:1px solid var(--glass-border);
+  padding:12px 6%;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+.nav-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:700;
+  font-size:1.05rem;
+  letter-spacing:0.5px;
+}
+
+.nav-logo{
+  width:38px; height:38px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.75rem;
+  overflow:hidden;
+  border:2px solid rgba(255,255,255,0.2);
+  flex-shrink:0;
+}
+.nav-logo img{ width:100%; height:100%; object-fit:cover; }
+
+.nav-links{
+  display:flex;
+  gap:32px;
+  align-items:center;
+}
+
+.nav-links a{
+  position:relative;
+  font-size:0.92rem;
+  color:var(--text-muted);
+  transition:color .3s ease;
+  padding:4px 0;
+}
+.nav-links a::after{
+  content:'';
+  position:absolute;
+  left:0; bottom:-2px;
+  width:0; height:2px;
+  background:linear-gradient(90deg,var(--accent-1),var(--accent-2));
+  transition:width .3s var(--ease);
+}
+.nav-links a:hover{ color:var(--text-main); }
+.nav-links a:hover::after{ width:100%; }
+
+.nav-toggle{
+  display:none;
+  flex-direction:column;
+  gap:5px;
+  width:32px;
+  z-index:1100;
+}
+.nav-toggle span{
+  height:2px;
+  width:100%;
+  background:var(--text-main);
+  border-radius:2px;
+  transition:transform .3s ease, opacity .3s ease;
+}
+.nav-toggle.active span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.nav-toggle.active span:nth-child(2){ opacity:0; }
+.nav-toggle.active span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+/* ==========================================================================
+   5. GLASSMORPHISM UTILITY
+   ========================================================================== */
+.glass{
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+  border-radius:var(--radius-md);
+  box-shadow:var(--shadow-soft);
+}
+
+/* ==========================================================================
+   6. LAYOUT / SECTION GENERAL
+   ========================================================================== */
+.section{
+  position:relative;
+  padding:120px 6% 100px;
+  max-width:1280px;
+  margin:0 auto;
+}
+
+.section-tag{
+  display:inline-block;
+  font-size:0.75rem;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--accent-2);
+  margin-bottom:14px;
+  font-weight:600;
+}
+
+.section-title{
+  font-family:var(--font-display);
+  font-size:clamp(2rem, 4vw, 3rem);
+  font-weight:700;
+  margin-bottom:16px;
+  line-height:1.2;
+}
+
+.section-desc{
+  color:var(--text-muted);
+  max-width:640px;
+  font-size:1rem;
+  margin-bottom:50px;
+}
+
+.gradient-text{
+  background:linear-gradient(100deg,var(--accent-1),var(--accent-2) 60%,var(--accent-3));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+/* Scroll reveal */
+.reveal{
+  opacity:0;
+  transform:translateY(50px);
+  transition:opacity .9s var(--ease), transform .9s var(--ease);
+}
+.reveal.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+.reveal-delay-1{ transition-delay:.1s; }
+.reveal-delay-2{ transition-delay:.2s; }
+.reveal-delay-3{ transition-delay:.3s; }
+.reveal-delay-4{ transition-delay:.4s; }
+
+/* ==========================================================================
+   7. HERO SECTION
+   ========================================================================== */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:140px 6% 80px;
+  position:relative;
+}
+
+.hero-logo{
+  width:130px; height:130px;
+  border-radius:50%;
+  margin-bottom:28px;
+  padding:6px;
+  background:linear-gradient(135deg,var(--accent-1),var(--accent-2),var(--accent-3));
+  animation:floatLogo 5s ease-in-out infinite;
+  box-shadow:0 0 60px rgba(124,92,255,0.35);
+}
+.hero-logo-inner{
+  width:100%; height:100%;
+  border-radius:50%;
+  overflow:hidden;
+  background:var(--bg-2);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-display);
+  font-size:1.8rem;
+  font-weight:700;
+}
+.hero-logo-inner img{ width:100%; height:100%; object-fit:cover; }
+
+@keyframes floatLogo{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-14px); }
+}
+
+.hero-eyebrow{
+  font-size:0.85rem;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  margin-bottom:20px;
+}
+
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.4rem, 7vw, 5rem);
+  font-weight:700;
+  line-height:1.1;
+  margin-bottom:22px;
+  max-width:900px;
+}
+
+.hero-subtitle{
+  font-size:clamp(1rem, 2vw, 1.25rem);
+  color:var(--text-muted);
+  max-width:600px;
+  margin-bottom:40px;
+}
+
+.hero-buttons{
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-bottom:70px;
+}
+
+.btn{
+  padding:14px 32px;
+  border-radius:100px;
+  font-size:0.95rem;
+  font-weight:600;
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+
+.btn-primary{
+  background:linear-gradient(120deg,var(--accent-1),var(--accent-2));
+  color:#05070d;
+  box-shadow:0 10px 30px rgba(124,92,255,0.35);
+}
+.btn-primary:hover{
+  transform:translateY(-4px) scale(1.03);
+  box-shadow:0 16px 40px rgba(124,92,255,0.5);
+}
+
+.btn-outline{
+  border:1px solid var(--glass-border);
+  background:var(--glass-bg);
+  backdrop-filter:blur(10px);
+}
+.btn-outline:hover{
+  transform:translateY(-4px);
+  border-color:var(--accent-2);
+  color:var(--accent-2);
+}
+
+.hero-scroll-indicator{
+  position:absolute;
+  bottom:36px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  color:var(--text-muted);
+  font-size:0.75rem;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  animation:bounce 2s infinite;
+}
+
+.scroll-line{
+  width:1px; height:40px;
+  background:linear-gradient(var(--accent-2), transparent);
+}
+
+@keyframes bounce{
+  0%,100%{ transform:translate(-50%,0); }
+  50%{ transform:translate(-50%,10px); }
+}
+
+/* ==========================================================================
+   8. QUOTE / INSPIRATIONAL SECTION
+   ========================================================================== */
+.quote-section{
+  text-align:center;
+  padding:60px 6%;
+  max-width:900px;
+  margin:0 auto;
+}
+.quote-mark{
+  font-family:var(--font-display);
+  font-size:5rem;
+  color:var(--accent-1);
+  opacity:0.5;
+  line-height:0;
+  margin-bottom:10px;
+}
+.quote-text{
+  font-family:var(--font-display);
+  font-size:clamp(1.3rem, 3vw, 2rem);
+  font-style:italic;
+  line-height:1.5;
+  margin-bottom:18px;
+}
+.quote-author{
+  color:var(--text-muted);
+  font-size:0.9rem;
+  letter-spacing:1px;
+}
+
+/* ==========================================================================
+   9. STATISTICS
+   ========================================================================== */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:24px;
+}
+
+.stat-card{
+  padding:36px 20px;
+  text-align:center;
+  transition:transform .4s var(--ease), border-color .4s var(--ease);
+}
+.stat-card:hover{
+  transform:translateY(-8px);
+  border-color:var(--accent-2);
+}
+
+.stat-number{
+  font-family:var(--font-display);
+  font-size:2.6rem;
+  font-weight:700;
+  background:linear-gradient(120deg,var(--accent-1),var(--accent-2));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  margin-bottom:6px;
+}
+
+.stat-label{
+  font-size:0.85rem;
+  color:var(--text-muted);
+  letter-spacing:0.5px;
+}
+
+/* ==========================================================================
+   10. WALI KELAS
+   ========================================================================== */
+.teacher-card{
+  display:flex;
+  align-items:center;
+  gap:44px;
+  padding:44px;
+  flex-wrap:wrap;
+}
+
+.teacher-photo{
+  width:190px; height:190px;
+  border-radius:50%;
+  overflow:hidden;
+  border:3px solid var(--glass-border);
+  flex-shrink:0;
+  position:relative;
+}
+.teacher-photo img{ width:100%; height:100%; object-fit:cover; }
+
+.teacher-info{ flex:1; min-width:240px; }
+
+.teacher-name{
+  font-family:var(--font-display);
+  font-size:1.8rem;
+  margin-bottom:6px;
+}
+
+.teacher-role{
+  color:var(--accent-2);
+  font-size:0.9rem;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-bottom:18px;
+}
+
+.teacher-desc{
+  color:var(--text-muted);
+  max-width:520px;
+}
+
+/* ==========================================================================
+   11. STRUKTUR KELAS - CARDS
+   ========================================================================== */
+.struktur-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(240px,1fr));
+  gap:24px;
+}
+
+.struktur-card{
+  padding:32px 26px;
+  transition:transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
+  position:relative;
+  overflow:hidden;
+}
+
+.struktur-card::before{
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--accent-1),var(--accent-2),var(--accent-3));
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .5s var(--ease);
+}
+
+.struktur-card:hover{
+  transform:translateY(-10px);
+  box-shadow:0 25px 60px rgba(0,0,0,0.5);
+  border-color:var(--accent-1);
+}
+.struktur-card:hover::before{ transform:scaleX(1); }
+
+.struktur-icon{
+  width:52px; height:52px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.4rem;
+  margin-bottom:20px;
+}
+
+.struktur-role{
+  font-size:0.78rem;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--text-muted);
+  margin-bottom:8px;
+}
+
+.struktur-name{
+  font-size:1.25rem;
+  font-weight:700;
+}
+
+/* ==========================================================================
+   12. GALERI
+   ========================================================================== */
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:22px;
+}
+
+.gallery-item{
+  position:relative;
+  border-radius:var(--radius-md);
+  overflow:hidden;
+  aspect-ratio:4/3;
+  border:1px solid var(--glass-border);
+}
+
+.gallery-item img{
+  width:100%; height:100%;
+  object-fit:cover;
+  transition:transform .6s var(--ease);
+}
+
+.gallery-item:hover img{ transform:scale(1.12); }
+
+.gallery-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:flex-end;
+  padding:20px;
+  background:linear-gradient(to top, rgba(0,0,0,0.75), transparent 60%);
+  opacity:0;
+  transition:opacity .4s ease;
+}
+.gallery-item:hover .gallery-overlay{ opacity:1; }
+.gallery-overlay span{ font-weight:600; font-size:0.95rem; }
+
+/* ==========================================================================
+   13. DAFTAR SISWA
+   ========================================================================== */
+.students-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+  gap:18px;
+}
+
+.student-chip{
+  padding:22px 14px;
+  text-align:center;
+  cursor:pointer;
+  transition:transform .35s var(--ease), border-color .35s var(--ease), background .35s var(--ease);
+}
+
+.student-chip:hover{
+  transform:translateY(-6px) scale(1.04);
+  border-color:var(--accent-2);
+  background:rgba(56,230,197,0.08);
+}
+
+.student-avatar{
+  width:64px; height:64px;
+  border-radius:50%;
+  margin:0 auto 12px;
+  overflow:hidden;
+  background:linear-gradient(135deg,var(--accent-1),var(--accent-3));
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700;
+  font-size:1.1rem;
+}
+.student-avatar img{ width:100%; height:100%; object-fit:cover; }
+
+.student-name{ font-size:0.92rem; font-weight:600; }
+
+/* ==========================================================================
+   14. MODAL SISWA
+   ========================================================================== */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  background:rgba(3,4,10,0.75);
+  backdrop-filter:blur(6px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .35s ease, visibility .35s ease;
+  padding:20px;
+}
+.modal-overlay.active{ opacity:1; visibility:visible; }
+
+.modal-box{
+  max-width:420px;
+  width:100%;
+  padding:40px 32px;
+  text-align:center;
+  position:relative;
+  transform:scale(0.85) translateY(30px);
+  transition:transform .4s var(--ease);
+}
+.modal-overlay.active .modal-box{ transform:scale(1) translateY(0); }
+
+.modal-close{
+  position:absolute;
+  top:16px; right:18px;
+  width:34px; height:34px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.08);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem;
+  transition:background .3s ease, transform .3s ease;
+}
+.modal-close:hover{ background:rgba(255,255,255,0.18); transform:rotate(90deg); }
+
+.modal-photo{
+  width:130px; height:130px;
+  border-radius:50%;
+  margin:0 auto 22px;
+  overflow:hidden;
+  border:3px solid var(--glass-border);
+  background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+}
+.modal-photo img{ width:100%; height:100%; object-fit:cover; }
+
+.modal-name{
+  font-family:var(--font-display);
+  font-size:1.6rem;
+  margin-bottom:10px;
+}
+
+.modal-desc{
+  color:var(--text-muted);
+  font-size:0.95rem;
+  line-height:1.7;
+}
+
+/* ==========================================================================
+   15. FOOTER
+   ========================================================================== */
+.footer{
+  padding:70px 6% 40px;
+  position:relative;
+  border-top:1px solid var(--glass-border);
+  margin-top:60px;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  gap:40px;
+  max-width:1280px;
+  margin:0 auto 40px;
+}
+
+.footer-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:700;
+  margin-bottom:14px;
+}
+
+.footer-desc{
+  color:var(--text-muted);
+  font-size:0.9rem;
+  max-width:340px;
+}
+
+.footer-heading{
+  font-size:0.85rem;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-bottom:18px;
+  color:var(--text-main);
+}
+
+.footer-links li{ margin-bottom:10px; }
+.footer-links a{
+  color:var(--text-muted);
+  font-size:0.9rem;
+  transition:color .3s ease, padding-left .3s ease;
+}
+.footer-links a:hover{ color:var(--accent-2); padding-left:6px; }
+
+.footer-bottom{
+  text-align:center;
+  padding-top:30px;
+  border-top:1px solid var(--glass-border);
+  color:var(--text-muted);
+  font-size:0.82rem;
+  max-width:1280px;
+  margin:0 auto;
+}
+
+/* ==========================================================================
+   16. BACK TO TOP
+   ========================================================================== */
+.back-to-top{
+  position:fixed;
+  bottom:30px; right:30px;
+  width:52px; height:52px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  z-index:900;
+  font-size:1.2rem;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(20px);
+  transition:opacity .4s ease, visibility .4s ease, transform .4s var(--ease), background .3s ease;
+}
+.back-to-top.show{
+  opacity:1; visibility:visible; transform:translateY(0);
+}
+.back-to-top:hover{
+  background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+  color:#05070d;
+}
+
+/* ==========================================================================
+   17. RESPONSIVE
+   ========================================================================== */
+@media (max-width: 900px){
+  .stats-grid{ grid-template-columns:repeat(2,1fr); }
+  .gallery-grid{ grid-template-columns:repeat(2,1fr); }
+  .footer-grid{ grid-template-columns:1fr; }
+}
+
+@media (max-width: 768px){
+  .nav-links{
+    position:fixed;
+    top:0; right:0;
+    height:100vh;
+    width:min(75vw, 320px);
+    flex-direction:column;
+    justify-content:center;
+    gap:34px;
+    background:rgba(8,10,20,0.97);
+    backdrop-filter:blur(20px);
+    transform:translateX(100%);
+    transition:transform .45s var(--ease);
+    border-left:1px solid var(--glass-border);
+  }
+  .nav-links.active{ transform:translateX(0); }
+  .nav-toggle{ display:flex; }
+
+  .teacher-card{ flex-direction:column; text-align:center; }
+  .teacher-desc{ max-width:100%; }
+
+  .gallery-grid{ grid-template-columns:1fr; }
+  .stats-grid{ grid-template-columns:repeat(2,1fr); }
+}
+
+@media (max-width: 480px){
+  .section{ padding:90px 5% 70px; }
+  .stats-grid{ grid-template-columns:1fr 1fr; gap:14px; }
+  .students-grid{ grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); }
+  .hero-buttons{ flex-direction:column; width:100%; }
+  .btn{ justify-content:center; width:100%; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     LOADING SCREEN
+     ============================================================ -->
+<div id="loading-screen">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Memuat 6ZBA...</div>
+</div>
+
+<!-- Animated background layers -->
+<div class="bg-animated"></div>
+<div class="blob blob-1" id="blob1"></div>
+<div class="blob blob-2" id="blob2"></div>
+<div class="blob blob-3" id="blob3"></div>
+<div class="noise-overlay"></div>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <img src="logo.png" alt="Logo Kelas 6ZBA" onerror="this.style.display='none'; this.parentElement.textContent='6Z';">
+    </div>
+    <span>6ZBA</span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#hero" class="nav-link-item">Beranda</a></li>
+    <li><a href="#wali-kelas" class="nav-link-item">Wali Kelas</a></li>
+    <li><a href="#struktur" class="nav-link-item">Struktur</a></li>
+    <li><a href="#galeri" class="nav-link-item">Galeri</a></li>
+    <li><a href="#siswa" class="nav-link-item">Siswa</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Buka menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+     ============================================================ -->
+<header class="hero" id="hero">
+  <div class="hero-logo">
+    <div class="hero-logo-inner">
+      <img src="logo.png" alt="Logo Kelas" onerror="this.style.display='none'; this.parentElement.textContent='6ZBA';">
+    </div>
+  </div>
+  <p class="hero-eyebrow reveal">Selamat Datang di Website Resmi</p>
+  <h1 class="hero-title reveal reveal-delay-1">
+    Kelas 6 <span class="gradient-text">Zubair Bin Awwam</span> (6ZBA)
+  </h1>
+  <p class="hero-subtitle reveal reveal-delay-2">
+    Belajar dengan semangat, tumbuh dengan karakter. Inilah rumah kedua kami — tempat mimpi-mimpi kecil mulai dirajut menjadi masa depan yang besar.
+  </p>
+  <div class="hero-buttons reveal reveal-delay-3">
+    <a href="#siswa" class="btn btn-primary">Lihat Daftar Siswa</a>
+    <a href="#struktur" class="btn btn-outline">Struktur Kelas</a>
+  </div>
+  <div class="hero-scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</header>
+
+<!-- ============================================================
+     KATA-KATA INSPIRATIF
+     ============================================================ -->
+<section class="quote-section reveal">
+  <div class="quote-mark">"</div>
+  <p class="quote-text">Kamu tidak harus menjadi hebat untuk memulai, tapi kamu harus memulai untuk menjadi hebat.</p>
+  <p class="quote-author">— Untuk seluruh siswa-siswi hebat Kelas 6ZBA</p>
+</section>
+
+<!-- ============================================================
+     STATISTIK KELAS
+     ============================================================ -->
+<section class="section" id="statistik">
+  <div class="stats-grid">
+    <div class="glass stat-card reveal">
+      <div class="stat-number" data-count="25">0</div>
+      <div class="stat-label">Total Siswa</div>
+    </div>
+    <div class="glass stat-card reveal reveal-delay-1">
+      <div class="stat-number" data-count="7">0</div>
+      <div class="stat-label">Struktur Jabatan</div>
+    </div>
+    <div class="glass stat-card reveal reveal-delay-2">
+      <div class="stat-number" data-count="1">0</div>
+      <div class="stat-label">Wali Kelas</div>
+    </div>
+    <div class="glass stat-card reveal reveal-delay-3">
+      <div class="stat-number" data-count="6">0</div>
+      <div class="stat-label">Tingkat Kelas</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     WALI KELAS
+     ============================================================ -->
+<section class="section" id="wali-kelas">
+  <p class="section-tag reveal">Pembimbing Kami</p>
+  <h2 class="section-title reveal">Wali Kelas</h2>
+  <p class="section-desc reveal">Sosok yang membimbing, mendidik, dan menemani perjalanan belajar seluruh siswa 6ZBA setiap hari.</p>
+
+  <div class="glass teacher-card reveal">
+    <div class="teacher-photo">
+      <img src="walikelas.jpg" alt="Foto Ibu Dimilia" onerror="this.src='';this.alt='Foto tidak tersedia';">
+    </div>
+    <div class="teacher-info">
+      <h3 class="teacher-name">Ibu Dimilia</h3>
+      <p class="teacher-role">Wali Kelas 6ZBA</p>
+      <p class="teacher-desc">Dengan penuh kesabaran dan ketulusan, Ibu Dimilia membimbing setiap siswa untuk tidak hanya pintar secara akademik, tetapi juga tumbuh menjadi pribadi yang berakhlak, disiplin, dan percaya diri menghadapi masa depan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     STRUKTUR KELAS
+     ============================================================ -->
+<section class="section" id="struktur">
+  <p class="section-tag reveal">Kepengurusan</p>
+  <h2 class="section-title reveal">Struktur Kelas</h2>
+  <p class="section-desc reveal">Kepengurusan kelas yang bekerja sama menjaga kekompakan dan kelancaran kegiatan belajar sehari-hari.</p>
+
+  <div class="struktur-grid">
+    <div class="glass struktur-card reveal">
+      <div class="struktur-icon">★</div>
+      <p class="struktur-role">Ketua Kelas</p>
+      <p class="struktur-name">Rengganis</p>
+    </div>
+    <div class="glass struktur-card reveal reveal-delay-1">
+      <div class="struktur-icon">☆</div>
+      <p class="struktur-role">Wakil Ketua</p>
+      <p class="struktur-name">Kanza</p>
+    </div>
+    <div class="glass struktur-card reveal reveal-delay-2">
+      <div class="struktur-icon">✎</div>
+      <p class="struktur-role">Sekretaris</p>
+      <p class="struktur-name">Sofia &amp; Azzahra</p>
+    </div>
+    <div class="glass struktur-card reveal reveal-delay-3">
+      <div class="struktur-icon">💰</div>
+      <p class="struktur-role">Bendahara</p>
+      <p class="struktur-name">Fayza &amp; Aluna</p>
+    </div>
+    <div class="glass struktur-card reveal">
+      <div class="struktur-icon">⚽</div>
+      <p class="struktur-role">Seksi Olahraga</p>
+      <p class="struktur-name">Benzema &amp; Qhiran</p>
+    </div>
+    <div class="glass struktur-card reveal reveal-delay-1">
+      <div class="struktur-icon">➕</div>
+      <p class="struktur-role">Seksi Kesehatan</p>
+      <p class="struktur-name">Nayla &amp; Lupa</p>
+    </div>
+    <div class="glass struktur-card reveal reveal-delay-2">
+      <div class="struktur-icon">🧹</div>
+      <p class="struktur-role">Seksi Kebersihan</p>
+      <p class="struktur-name">Zahira &amp; Al Ganteng</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     GALERI
+     ============================================================ -->
+<section class="section" id="galeri">
+  <p class="section-tag reveal">Momen Kebersamaan</p>
+  <h2 class="section-title reveal">Galeri Kelas</h2>
+  <p class="section-desc reveal">Kumpulan potret kebersamaan dan keceriaan siswa-siswi 6ZBA dalam berbagai kegiatan.</p>
+
+  <div class="gallery-grid">
+    <div class="gallery-item reveal">
+      <img src="kelas1.jpg" alt="Foto kegiatan kelas 1" onerror="this.style.background='linear-gradient(135deg,#7c5cff,#38e6c5)';">
+      <div class="gallery-overlay"><span>Kegiatan Belajar</span></div>
+    </div>
+    <div class="gallery-item reveal reveal-delay-1">
+      <img src="kelas2.jpg" alt="Foto kegiatan kelas 2" onerror="this.style.background='linear-gradient(135deg,#38e6c5,#ff6b9d)';">
+      <div class="gallery-overlay"><span>Kegiatan Outdoor</span></div>
+    </div>
+    <div class="gallery-item reveal reveal-delay-2">
+      <img src="kelas3.jpg" alt="Foto kegiatan kelas 3" onerror="this.style.background='linear-gradient(135deg,#ff6b9d,#7c5cff)';">
+      <div class="gallery-overlay"><span>Perayaan Kelas</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     DAFTAR SISWA
+     ============================================================ -->
+<section class="section" id="siswa">
+  <p class="section-tag reveal">25 Bintang Kelas</p>
+  <h2 class="section-title reveal">Daftar Siswa</h2>
+  <p class="section-desc reveal">Klik nama siswa untuk melihat profil dan karakter masing-masing.</p>
+
+  <div class="students-grid" id="studentsGrid">
+    <!-- Diisi otomatis oleh JavaScript -->
+  </div>
+</section>
+
+<!-- ============================================================
+     MODAL SISWA
+     ============================================================ -->
+<div class="modal-overlay" id="studentModal">
+  <div class="glass modal-box">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-photo">
+      <img id="modalPhoto" src="" alt="Foto siswa">
+    </div>
+    <h3 class="modal-name" id="modalName">Nama Siswa</h3>
+    <p class="modal-desc" id="modalDesc">Deskripsi karakter siswa.</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <img src="logo.png" alt="Logo" onerror="this.style.display='none'; this.parentElement.textContent='6Z';">
+        </div>
+        <span>Kelas 6ZBA</span>
+      </div>
+      <p class="footer-desc">Kelas 6 Zubair Bin Awwam — kelas yang penuh semangat belajar, kekompakan, dan kebersamaan menuju jenjang pendidikan berikutnya.</p>
+    </div>
+    <div>
+      <h4 class="footer-heading">Navigasi</h4>
+      <ul class="footer-links">
+        <li><a href="#hero">Beranda</a></li>
+        <li><a href="#wali-kelas">Wali Kelas</a></li>
+        <li><a href="#struktur">Struktur Kelas</a></li>
+        <li><a href="#siswa">Daftar Siswa</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer-heading">Informasi</h4>
+      <ul class="footer-links">
+        <li><a href="#galeri">Galeri Kelas</a></li>
+        <li><a href="#statistik">Statistik</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; <span id="year"></span> Kelas 6 Zubair Bin Awwam (6ZBA). Dibuat dengan semangat kebersamaan.
+  </div>
+</footer>
+
+<!-- Tombol kembali ke atas -->
+<button class="glass back-to-top" id="backToTop" aria-label="Kembali ke atas">↑</button>
+
+<script>
+/* ==========================================================================
+   DATA SISWA
+   Setiap objek berisi: nama, file foto, dan deskripsi karakter singkat.
+   Data ini mudah diedit / ditambah tanpa mengubah struktur HTML lainnya.
+   ========================================================================== */
+const students = [
+  { name:"Aldy", photo:"aldy.jpg", desc:"Anak yang ceria dan mudah akrab dengan siapa saja. Selalu punya ide seru untuk bermain bersama teman-teman." },
+  { name:"Biyyu", photo:"biyyu.jpg", desc:"Tenang dan penuh perhatian. Biyyu selalu siap membantu teman yang kesulitan tanpa diminta." },
+  { name:"Aluna", photo:"aluna.jpg", desc:"Teliti dan bertanggung jawab, cocok menjadi bendahara karena rapi dalam mengatur keuangan kelas." },
+  { name:"Al Ganteng", photo:"alganteng.jpg", desc:"Rajin menjaga kebersihan kelas dan selalu mengingatkan teman-teman untuk membuang sampah pada tempatnya." },
+  { name:"Azzahra", photo:"azzahra.jpg", desc:"Rapi dan disiplin dalam mencatat, menjadikannya andalan sebagai sekretaris kelas." },
+  { name:"Benzema", photo:"benzema.jpg", desc:"Aktif dan bersemangat dalam olahraga, selalu memotivasi teman-teman untuk sehat dan aktif bergerak." },
+  { name:"Dimas", photo:"dimas.jpg", desc:"Pekerja keras dan pantang menyerah, selalu berusaha menyelesaikan tugas dengan baik." },
+  { name:"Fayza", photo:"fayza.jpg", desc:"Cermat dalam menghitung dan menjaga amanah, dipercaya menjadi bendahara kelas." },
+  { name:"Firaz", photo:"firaz.jpg", desc:"Kreatif dan suka mencoba hal baru, sering memberi ide segar dalam kegiatan kelas." },
+  { name:"Feisya", photo:"feisya.jpg", desc:"Ramah dan penyabar, disukai banyak teman karena sikapnya yang lembut." },
+  { name:"Qhiran", photo:"qhiran.jpg", desc:"Enerjik dan gemar berolahraga, selalu semangat memimpin pemanasan sebelum olahraga." },
+  { name:"Haura", photo:"haura.jpg", desc:"Rajin belajar dan tekun, sering menjadi teladan dalam kedisiplinan mengerjakan tugas." },
+  { name:"Maya", photo:"maya.jpg", desc:"Lembut dan penyayang, selalu peduli terhadap perasaan teman-temannya." },
+  { name:"Laqif", photo:"laqif.jpg", desc:"Pemberani dan percaya diri, tidak ragu untuk tampil di depan kelas." },
+  { name:"Akbar", photo:"akbar.jpg", desc:"Suka membaca dan berwawasan luas, sering berbagi pengetahuan baru dengan teman-teman." },
+  { name:"Zaidan", photo:"zaidan.jpg", desc:"Humoris dan menyenangkan, selalu bisa mencairkan suasana kelas yang tegang." },
+  { name:"Nayla", photo:"nayla.jpg", desc:"Peduli terhadap kesehatan teman-teman, selalu mengingatkan pentingnya menjaga kebersihan diri." },
+  { name:"Rafifa", photo:"rafifa.jpg", desc:"Anggun dan sopan, selalu menjaga tutur kata yang baik kepada semua orang." },
+  { name:"Raisa", photo:"raisa.jpg", desc:"Cerdas dan cepat tanggap, sering menjadi andalan dalam diskusi kelompok." },
+  { name:"Raziq", photo:"raziq.jpg", desc:"Tekun dan fokus, tidak mudah terganggu saat sedang mengerjakan tugas." },
+  { name:"Rengganis", photo:"rengganis.jpg", desc:"Pemimpin yang bertanggung jawab dan bijaksana, dipercaya menjadi ketua kelas oleh teman-teman." },
+  { name:"Athar", photo:"athar.jpg", desc:"Rendah hati dan suka menolong, selalu ada untuk teman yang membutuhkan bantuan." },
+  { name:"Sofia", photo:"sofia.jpg", desc:"Teliti dan rapi dalam mencatat, menjadi sekretaris kelas yang dapat diandalkan." },
+  { name:"Syafa", photo:"syafa.jpg", desc:"Ceria dan penuh semangat, selalu membawa energi positif ke dalam kelas." },
+  { name:"Zahira", photo:"zahira.jpg", desc:"Peduli lingkungan dan rajin menjaga kebersihan, menjadi teladan seksi kebersihan kelas." }
+];
+
+/* ==========================================================================
+   RENDER DAFTAR SISWA SECARA DINAMIS
+   ========================================================================== */
+function renderStudents(){
+  const grid = document.getElementById('studentsGrid');
+  const fragment = document.createDocumentFragment();
+
+  students.forEach((student, index) => {
+    const chip = document.createElement('div');
+    chip.className = 'glass student-chip reveal';
+    chip.setAttribute('data-index', index);
+
+    const initials = student.name.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+
+    chip.innerHTML = `
+      <div class="student-avatar">
+        <img src="${student.photo}" alt="Foto ${student.name}" loading="lazy"
+             onerror="this.style.display='none'; this.parentElement.textContent='${initials}';">
+      </div>
+      <div class="student-name">${student.name}</div>
+    `;
+
+    chip.addEventListener('click', () => openModal(index));
+    fragment.appendChild(chip);
+  });
+
+  grid.appendChild(fragment);
+}
+
+/* ==========================================================================
+   MODAL SISWA — BUKA & TUTUP
+   ========================================================================== */
+const modal = document.getElementById('studentModal');
+const modalPhoto = document.getElementById('modalPhoto');
+const modalName = document.getElementById('modalName');
+const modalDesc = document.getElementById('modalDesc');
+const modalClose = document.getElementById('modalClose');
+
+function openModal(index){
+  const student = students[index];
+  const initials = student.name.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+
+  modalPhoto.src = student.photo;
+  modalPhoto.alt = "Foto " + student.name;
+  modalPhoto.onerror = function(){
+    this.style.display = 'none';
+    this.parentElement.textContent = initials;
+  };
+  modalName.textContent = student.name;
+  modalDesc.textContent = student.desc;
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(){
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+modalClose.addEventListener('click', closeModal);
+modal.addEventListener('click', (e) => {
+  if(e.target === modal) closeModal();
+});
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+});
+
+/* ==========================================================================
+   NAVBAR: TRANSPARAN -> SOLID SAAT SCROLL
+   ========================================================================== */
+const navbar = document.getElementById('navbar');
+const backToTop = document.getElementById('backToTop');
+
+function handleScrollEffects(){
+  const scrollY = window.scrollY;
+
+  if(scrollY > 60){
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+
+  if(scrollY > 500){
+    backToTop.classList.add('show');
+  } else {
+    backToTop.classList.remove('show');
+  }
+
+  /* Efek parallax sederhana pada blob */
+  const blob1 = document.getElementById('blob1');
+  const blob2 = document.getElementById('blob2');
+  const blob3 = document.getElementById('blob3');
+  const offset = scrollY * 0.15;
+
+  blob1.style.transform = `translateY(${offset}px)`;
+  blob2.style.transform = `translateY(${-offset * 0.7}px)`;
+  blob3.style.transform = `translateY(${offset * 0.4}px)`;
+}
+
+window.addEventListener('scroll', handleScrollEffects, { passive:true });
+
+backToTop.addEventListener('click', () => {
+  window.scrollTo({ top:0, behavior:'smooth' });
+});
+
+/* ==========================================================================
+   MENU MOBILE TOGGLE
+   ========================================================================== */
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+
+navToggle.addEventListener('click', () => {
+  navToggle.classList.toggle('active');
+  navLinks.classList.toggle('active');
+});
+
+document.querySelectorAll('.nav-link-item').forEach(link => {
+  link.addEventListener('click', () => {
+    navToggle.classList.remove('active');
+    navLinks.classList.remove('active');
+  });
+});
+
+/* ==========================================================================
+   SCROLL REVEAL ANIMATION — INTERSECTION OBSERVER
+   ========================================================================== */
+function initScrollReveal(){
+  const revealElements = document.querySelectorAll('.reveal');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold:0.15,
+    rootMargin:'0px 0px -60px 0px'
+  });
+
+  revealElements.forEach(el => observer.observe(el));
+}
+
+/* ==========================================================================
+   ANIMASI COUNTER PADA STATISTIK
+   ========================================================================== */
+function animateCounters(){
+  const counters = document.querySelectorAll('.stat-number');
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const el = entry.target;
+        const target = parseInt(el.getAttribute('data-count'), 10);
+        let current = 0;
+        const duration = 1400;
+        const startTime = performance.now();
+
+        function step(now){
+          const progress = Math.min((now - startTime) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          current = Math.floor(eased * target);
+          el.textContent = current;
+          if(progress < 1){
+            requestAnimationFrame(step);
+          } else {
+            el.textContent = target;
+          }
+        }
+        requestAnimationFrame(step);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold:0.5 });
+
+  counters.forEach(counter => counterObserver.observe(counter));
+}
+
+/* ==========================================================================
+   SMOOTH SCROLL UNTUK NAVBAR ANCHOR
+   ========================================================================== */
+function initSmoothScroll(){
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e){
+      const targetId = this.getAttribute('href');
+      const targetEl = document.querySelector(targetId);
+      if(targetEl){
+        e.preventDefault();
+        const offsetTop = targetEl.getBoundingClientRect().top + window.scrollY - 70;
+        window.scrollTo({ top:offsetTop, behavior:'smooth' });
+      }
+    });
+  });
+}
+
+/* ==========================================================================
+   LOADING SCREEN
+   ========================================================================== */
+function initLoadingScreen(){
+  const loadingScreen = document.getElementById('loading-screen');
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      loadingScreen.classList.add('hidden');
+    }, 900);
+  });
+
+  /* Fallback jika event load lambat/tidak terpicu */
+  setTimeout(() => {
+    loadingScreen.classList.add('hidden');
+  }, 3500);
+}
+
+/* ==========================================================================
+   FOOTER: TAHUN OTOMATIS
+   ========================================================================== */
+function setCurrentYear(){
+  document.getElementById('year').textContent = new Date().getFullYear();
+}
+
+/* ==========================================================================
+   INISIALISASI SEMUA FUNGSI SAAT DOM SIAP
+   ========================================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+  initLoadingScreen();
+  renderStudents();
+  initScrollReveal();
+  animateCounters();
+  initSmoothScroll();
+  setCurrentYear();
+  handleScrollEffects();
+});
+</script>
+</body>
+</html>
